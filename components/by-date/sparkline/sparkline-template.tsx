@@ -48,7 +48,7 @@ const SparklineTemplate: React.FunctionComponent<ISparklineTemplateProps> = ({
   const primaryColor = getComputedStyle(
     document.documentElement
   ).getPropertyValue("--primary");
-  console.log(primaryColor); // 10px
+  // console.log(primaryColor); // 10px
 
   return (
     <Card>

@@ -42,7 +42,7 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
   const primaryColor = getComputedStyle(
     document.documentElement
   ).getPropertyValue("--primary");
-  console.log(primaryColor); // 10px
+  // console.log(primaryColor); // 10px
 
   // const primaryColor = "142.1 70.6% 45.3%";
 
