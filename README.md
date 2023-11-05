@@ -1,17 +1,54 @@
+# Hotel Dashboard Graphs
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+### [Deployed Link 🖇️]("https://hotel-dashboard-graphs-driptanil.vercel.app/"):
+
+"https://hotel-dashboard-graphs-driptanil.vercel.app/"
+
+## Tools Used:
+
+- Next JS 14: https://nextjs.org/
+- Prisma ORM: https://www.prisma.io/
+- tRPC: https://trpc.io/
+- TailwindCSS: https://tailwindcss.com/
+- ShadCN UI: https://ui.shadcn.com/
+- MongoDB: https://www.mongodb.com/
+- ReCharts: https://recharts.org/
+- ApexCharts: https://apexcharts.com/
+
+## API Endpoints:
+
+- getAllBookingsData: "https://hotel-dashboard-graphs-driptanil.vercel.app/api/trpc/getAllBookingsData"
+
+- getBookingsByCountries: "https://hotel-dashboard-graphs-driptanil.vercel.app/api/trpc/getBookingsByCountries"
+
+- getBookingsByDates: "https://hotel-dashboard-graphs-driptanil.vercel.app/api/trpc/getBookingsByDates"
+
 ## Getting Started
+
+Add a .env file
+
+```
+DATABASE_URL=""
+```
+
+Install Command:
+
+```
+npm install
+```
 
 First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+
+Vercel Production Build Command:
+
+```bash
+npx prisma generate && next build
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

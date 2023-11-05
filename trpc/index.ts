@@ -8,6 +8,11 @@ export const appRouter = router({
     return 100;
   }),
 
+  getAllBookingsData: publicProcedure.query(async () => {
+    const bookings = await prisma.booking.findMany({});
+    return bookings;
+  }),
+
   getBookingsByCountries: publicProcedure.query(async () => {
     const bookings = prisma.booking.groupBy({
       by: ["country"],
