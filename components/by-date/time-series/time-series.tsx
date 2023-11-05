@@ -161,7 +161,7 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
                   categories: data.map((item) =>
                     format(new Date(item.arrival_date), "d MMM yyyy")
                   ),
-                  tickAmount: 3,
+                  tickAmount: 4,
                 },
               }}
               series={[

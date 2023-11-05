@@ -47,7 +47,7 @@ const MainPage: React.FunctionComponent<IMainPageProps> = (props) => {
     return <p>Something went wrong</p>;
   }
   return (
-    <main className="min-h-screen w-full flex flex-col gap-5 p-10">
+    <main className="min-h-screen w-full max-w-7xl mx-auto flex flex-col gap-5 p-10">
       <DatePickerForm from={firstDate} to={lastDate} />
       {/* <ByDateGraphs
         data={formattedData}
