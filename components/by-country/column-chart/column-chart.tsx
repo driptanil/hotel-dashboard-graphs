@@ -66,10 +66,10 @@ const ColumnChart: React.FunctionComponent<IColumnChartProps> = ({
             </div>
             <CardDescription>Visitors from all countries</CardDescription>
           </CardHeader>
-          <TabsContent value="apexchart">
+          <TabsContent value="apexchart" className="-mt-7 -mb-5">
             <Chart
               type="bar"
-              height={350}
+              height={250}
               options={{
                 chart: {
                   fontFamily: "inherit",
@@ -133,13 +133,13 @@ const ColumnChart: React.FunctionComponent<IColumnChartProps> = ({
           </TabsContent>
           <TabsContent value="rechart">
             <ResponsiveContainer
-              className="min-h-[250px] w-full"
+              className="min-h-[200px] w-full"
               width="100%"
               height="100%"
             >
               <BarChart
                 width={500}
-                height={400}
+                height={250}
                 data={formattedData}
                 margin={{
                   top: 10,

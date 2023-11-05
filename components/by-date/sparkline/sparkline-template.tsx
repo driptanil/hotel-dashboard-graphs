@@ -43,7 +43,10 @@ const SparklineTemplate: React.FunctionComponent<ISparklineTemplateProps> = ({
     return acc + item;
   }, 0);
 
-  const percent = ((totalVisitors - pastDaysTotal) / totalVisitors) * 100;
+  const percent =
+    totalVisitors !== 0
+      ? ((totalVisitors - pastDaysTotal) / totalVisitors) * 100
+      : 0;
 
   const primaryColor = getComputedStyle(
     document.documentElement
@@ -83,13 +86,13 @@ const SparklineTemplate: React.FunctionComponent<ISparklineTemplateProps> = ({
               ) : percent < 0 ? (
                 <ArrowDown className="w-4 h-4 mr-1" />
               ) : (
-                <Circle className="w-4 h-4 mr-1" />
+                <Circle className="w-3 h-3 mr-1" />
               )}
-              {percent.toFixed(1).substring(1)} %
+              {percent.toFixed(1)} %
             </div>
           </CardTitle>
         </CardHeader>
-        <div className="-mt-16 -mb-8">
+        <div className="-mt-12 -mb-10">
           <ReactApexChart
             width={"100%"}
             height={150}

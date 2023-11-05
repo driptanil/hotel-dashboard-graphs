@@ -21,6 +21,8 @@ import { format } from "date-fns";
 import CustomTooltip from "./tooltip";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReactApexChart from "react-apexcharts";
+import { ArrowDown, ArrowUp, Circle, Triangle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type TByDateBooking = RouterOutputs["getBookingsByDates"][number];
 
@@ -29,15 +31,28 @@ type TByDateBookingWithTotal = TByDateBooking & { total: number };
 interface ITimeSeriesProps {
   data: TByDateBookingWithTotal[];
   resolvedTheme: string;
+  days: number;
 }
 
 const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
   data,
   resolvedTheme,
+  days,
 }) => {
   const totalVisitors = data.reduce((total, item) => {
     return total + item.total;
   }, 0);
+
+  const pastdays = data.slice(-days);
+
+  const pastDaysTotal = pastdays.reduce((acc, item) => {
+    return acc + item.total;
+  }, 0);
+
+  const percent =
+    totalVisitors !== 0
+      ? ((totalVisitors - pastDaysTotal) / totalVisitors) * 100
+      : 0;
 
   const primaryColor = getComputedStyle(
     document.documentElement
@@ -53,20 +68,48 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
           <CardHeader className="w-full pr-0">
             <div className="flex justify-between items-center w-full">
               <div className="flex flex-col gap-2">
-                <CardDescription>Total Visitors</CardDescription>
-                <CardTitle>{totalVisitors}</CardTitle>
+                <CardDescription>
+                  <div className="flex text-xs sm:text-sm items-center">
+                    <Triangle className="flex sm:hidden w-3 h-3 mr-1" />
+                    <p className="hidden sm:flex mr-1">Total</p>
+                    Visitors
+                  </div>
+                </CardDescription>
+                <CardTitle className="flex gap-4 items-center">
+                  {totalVisitors}
+                  <div
+                    className={cn(
+                      "text-base sm:text-lg flex items-center",
+                      percent > 0
+                        ? "dark:text-lime-400 text-green-600"
+                        : percent < 0
+                        ? "dark:text-rose-400 text-green-600"
+                        : ""
+                    )}
+                  >
+                    {percent > 0 ? (
+                      <ArrowUp className="w-4 h-4 mr-1" />
+                    ) : percent < 0 ? (
+                      <ArrowDown className="w-4 h-4 mr-1" />
+                    ) : (
+                      <Circle className="w-3 h-3 mr-1" />
+                    )}
+                    {percent.toFixed(1)} %
+                  </div>
+                </CardTitle>
               </div>
+
               <TabsList className="">
                 <TabsTrigger value="rechart">Recharts</TabsTrigger>
                 <TabsTrigger value="apexchart">Apexcharts</TabsTrigger>
               </TabsList>
             </div>
-            <CardDescription>Adults + Childrens + Babies</CardDescription>
+            <CardDescription>Last {days} days</CardDescription>
           </CardHeader>
-          <TabsContent value="apexchart">
+          <TabsContent value="apexchart" className="-mt-7 -mb-5">
             <ReactApexChart
               width={"100%"}
-              height={350}
+              height={250}
               options={{
                 chart: {
                   type: "line",
@@ -111,11 +154,14 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
                   },
                 },
                 xaxis: {
+                  labels: {
+                    rotate: 0,
+                  },
                   type: "category",
                   categories: data.map((item) =>
-                    format(new Date(item.arrival_date), "do MMM yyyy")
+                    format(new Date(item.arrival_date), "d MMM yyyy")
                   ),
-                  tickAmount: 6,
+                  tickAmount: 3,
                 },
               }}
               series={[
@@ -144,13 +190,13 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
           </TabsContent>
           <TabsContent value="rechart">
             <ResponsiveContainer
-              className={"min-h-[300px] w-full"}
+              className={"min-h-[200px] w-full"}
               width="100%"
               height="100%"
             >
               <LineChart
                 width={500}
-                height={400}
+                height={200}
                 data={data}
                 margin={{
                   top: 10,

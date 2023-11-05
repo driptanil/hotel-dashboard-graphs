@@ -19,3 +19,9 @@ export const getFlagEmoji = (countryCode: string) => {
   const emoji = String.fromCodePoint(...codePoints);
   return emoji.substring(0, emoji.length - 2);
 };
+
+export const dateDiffInDays = (date1: Date, date2: Date): number => {
+  const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+  const timeDiff = Math.abs(date1.getTime() - date2.getTime());
+  return Math.floor(timeDiff / oneDay);
+};
