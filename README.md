@@ -11,19 +11,21 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 - Next JS 14: https://nextjs.org/
 - Prisma ORM: https://www.prisma.io/
 - tRPC: https://trpc.io/
+- MongoDB: https://www.mongodb.com/
 - TailwindCSS: https://tailwindcss.com/
 - ShadCN UI: https://ui.shadcn.com/
-- MongoDB: https://www.mongodb.com/
-- ReCharts: https://recharts.org/
 - ApexCharts: https://apexcharts.com/
+- ReCharts: https://recharts.org/
+- React Testing Library https://testing-library.com/docs/react-testing-library/intro/
+- Zest Testing https://jestjs.io/
 
-## API Endpoints:
+## Important Points
 
-- getAllBookingsData: "https://hotel-dashboard-graphs-driptanil.vercel.app/api/trpc/getAllBookingsData"
+- **_API Endpoints:_** Defined in `"@/trpc/index.ts file"`
 
-- getBookingsByCountries: "https://hotel-dashboard-graphs-driptanil.vercel.app/api/trpc/getBookingsByCountries"
+- **_Database Schema:_** Defined in `"@/prisma/schema.prisma file"`
 
-- getBookingsByDates: "https://hotel-dashboard-graphs-driptanil.vercel.app/api/trpc/getBookingsByDates"
+- **_Test:_** Defined in `"*/__test__"`
 
 ## Getting Started
 
