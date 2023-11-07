@@ -20,9 +20,8 @@ import CustomTooltip from "./recharts-tooltip";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { countryNames, getFlagEmoji } from "@/lib/utils";
 // import CustomTooltip from "./tooltip";
-import dynamic from "next/dynamic";
 import { RouterOutputs } from "@/app/_trpc/client";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import ReactApexChart from "react-apexcharts";
 
 type TByCountryBooking = RouterOutputs["getBookingsByCountries"][number];
 
@@ -67,7 +66,7 @@ const ColumnChart: React.FunctionComponent<IColumnChartProps> = ({
             <CardDescription>Visitors from all countries</CardDescription>
           </CardHeader>
           <TabsContent value="apexchart" className="-mt-7 -mb-5">
-            <Chart
+            <ReactApexChart
               type="bar"
               height={250}
               options={{

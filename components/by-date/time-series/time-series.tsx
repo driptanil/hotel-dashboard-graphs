@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../ui/card";
-import { RouterOutputs, trpc } from "@/app/_trpc/client";
+import { RouterOutputs } from "@/app/_trpc/client";
 import {
   LineChart,
   Line,
@@ -100,7 +100,9 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
               </div>
 
               <TabsList className="">
-                <TabsTrigger value="rechart">Recharts</TabsTrigger>
+                <TabsTrigger data-testid="rechart-line-button" value="rechart">
+                  Recharts
+                </TabsTrigger>
                 <TabsTrigger value="apexchart">Apexcharts</TabsTrigger>
               </TabsList>
             </div>
@@ -161,7 +163,6 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
                   categories: data.map((item) =>
                     format(new Date(item.arrival_date), "d MMM yyyy")
                   ),
-                  tickAmount: 4,
                 },
               }}
               series={[
@@ -195,6 +196,7 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
               height="100%"
             >
               <LineChart
+                data-testid="rechart-line"
                 width={500}
                 height={200}
                 data={data}

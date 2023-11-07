@@ -2,7 +2,6 @@
 
 import { RouterOutputs, trpc } from "@/app/_trpc/client";
 import dynamic from "next/dynamic";
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 const ColumnChart = dynamic(() => import("./column-chart/column-chart"), {
   ssr: true,
 });

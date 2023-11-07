@@ -87,16 +87,13 @@ const DatePickerForm: React.FunctionComponent<IDatePickerFormProps> = ({
     //   ),
     // });
 
-    utils.getBookingsByDates.refetch({
-      date: {
-        from: values.date.from.toISOString(),
-        to: values.date.to.toISOString(),
-      },
-    });
+    console.log(data?.length);
     // console.log(values.date);
   }
 
   const { resolvedTheme } = useTheme();
+
+  const [boolean, setBoolean] = React.useState(false);
 
   //   console.log(data?.length);
 
@@ -138,13 +135,25 @@ const DatePickerForm: React.FunctionComponent<IDatePickerFormProps> = ({
                         mode="range"
                         selected={field.value}
                         onSelect={(event) => {
-                          field.onChange(
-                            event || {
-                              from: new Date(from),
-                              to: new Date(to),
-                            }
-                          );
-                          form.handleSubmit(onSubmit);
+                          if (event?.from && event?.to) {
+                            field.onChange(
+                              event || {
+                                from: new Date(from),
+                                to: new Date(to),
+                              }
+                            );
+
+                            setBoolean(!boolean);
+
+                            utils.getBookingsByDates.invalidate({
+                              date: {
+                                from: field.value.from.toISOString(),
+                                to: field.value.to.toISOString(),
+                              },
+                            });
+
+                            // console.log(data?.length);
+                          }
                         }}
                         disabled={(date) =>
                           date < new Date(from) || date > new Date(to)
@@ -195,7 +204,7 @@ const DatePickerForm: React.FunctionComponent<IDatePickerFormProps> = ({
           )}
         />
       ) : (
-        <>No data</>
+        <div>No data</div>
       )}
       {isLoadingCountry ? (
         <Card className="animate-pulse h-[400px]">
@@ -210,7 +219,7 @@ const DatePickerForm: React.FunctionComponent<IDatePickerFormProps> = ({
           resolvedTheme={resolvedTheme || "dark"}
         />
       ) : (
-        <>No Data</>
+        <div>No Data</div>
       )}
     </>
   );

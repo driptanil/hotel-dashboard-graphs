@@ -32,7 +32,7 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <ClientOnly>
               <ThemeToggle className="fixed top-4 right-4" />
-            </ClientOnly>{" "}
+            </ClientOnly>
             {children}
           </ThemeProvider>
         </TRPCProvider>
