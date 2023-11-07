@@ -9,6 +9,7 @@ export const appRouter = router({
     return 100;
   }),
 
+  // fetching first date of saved bookings
   getFirstDate: publicProcedure.query(async () => {
     const firstBooking = await prisma.booking.findFirst({
       take: 1,
@@ -20,6 +21,7 @@ export const appRouter = router({
     return firstBooking?.arrival_date;
   }),
 
+  // fetching last date of saved bookings
   getLastDate: publicProcedure.query(async () => {
     const lastBooking = await prisma.booking.findFirst({
       take: 1,
@@ -31,11 +33,13 @@ export const appRouter = router({
     return lastBooking?.arrival_date;
   }),
 
+  // fetching all bookings data for preview
   getAllBookingsData: publicProcedure.query(async () => {
     const bookings = await prisma.booking.findMany({});
     return bookings;
   }),
 
+  // fetching all bookings data group by countries
   getBookingsByCountries: publicProcedure
     .input(
       z.object({
@@ -67,6 +71,7 @@ export const appRouter = router({
       return bookings;
     }),
 
+  // fetching all bookings data group by dates
   getBookingsByDates: publicProcedure
     .input(
       z.object({

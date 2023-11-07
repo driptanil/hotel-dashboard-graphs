@@ -1,19 +1,21 @@
 "use client";
 
 import React from "react";
+
+// backend import
 import { trpc } from "./_trpc/client";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
+// component import
 import DatePickerForm from "@/components/forms/date-range-form";
-import { Loader } from "lucide-react";
+
+// icon import
+import { Calendar, Loader, XCircle } from "lucide-react";
 
 interface IMainPageProps {}
 
 const MainPage: React.FunctionComponent<IMainPageProps> = (props) => {
+  // fetch starting and ending dates of sample data from backend,
+  // so that we can set dates out of this range as disabled in the calendar
   const {
     data: firstDate,
     isLoading: loadingFirstDate,
@@ -26,9 +28,7 @@ const MainPage: React.FunctionComponent<IMainPageProps> = (props) => {
     error: lastDateError,
   } = trpc.getLastDate.useQuery();
 
-  // console.log("Loading first date: ", loadingFirstDate);
-  // console.log("Loading last date: ", loadingLastDate);
-
+  // loading state
   if (loadingFirstDate || loadingLastDate) {
     return (
       <div className="min-h-screen animate-pulse flex gap-4 text-xl items-center justify-center">
@@ -37,11 +37,42 @@ const MainPage: React.FunctionComponent<IMainPageProps> = (props) => {
     );
   }
 
+  // first date is not available
   if (!firstDate) {
-    return <p>Something went wrong</p>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-5">
+        <div className="flex text-2xl text-rose-500 font-semibold gap-5 items-center">
+          <XCircle className="w-10 h-10 " />
+          <div>
+            <p>Error</p>
+            <p className="text-base">{firstDateError?.message}</p>
+          </div>
+        </div>
+        <div className="flex gap-5 items-center text-lg">
+          <Calendar className="w-6 h-6" />
+          Unable to fetch starting date of sample data
+        </div>
+      </div>
+    );
   }
+
+  // last date is not available
   if (!lastDate) {
-    return <p>Something went wrong</p>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-5">
+        <div className="flex text-2xl text-rose-500 font-semibold gap-5 items-center">
+          <XCircle className="w-10 h-10 " />
+          <div>
+            <p>Error</p>
+            <p className="text-base">{lastDateError?.message}</p>
+          </div>
+        </div>
+        <div className="flex gap-5 items-center text-lg">
+          <Calendar className="w-6 h-6" />
+          Unable to fetch ending date of sample data
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -49,8 +80,11 @@ const MainPage: React.FunctionComponent<IMainPageProps> = (props) => {
       data-testid="mainPage"
       className="min-h-screen w-full max-w-7xl mx-auto flex flex-col gap-5 p-10"
     >
-      {/* <h1>Date Range</h1> */}
-      <DatePickerForm from={firstDate} to={lastDate} />
+      <DatePickerForm
+        data-testid="DatePickerForm"
+        from={firstDate}
+        to={lastDate}
+      />
     </main>
   );
 };

@@ -1,6 +1,6 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
-import "./globals.css";
 import { cn } from "@/lib/utils";
 import TRPCProvider from "@/providers/tRPCProvider";
 import ClientOnly from "@/providers/ClientOnly";
@@ -31,6 +31,7 @@ export default function RootLayout({
         <TRPCProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <ClientOnly>
+              {/* Theme Changer rapped by ClientOnly to avoid HYDRATION ERRORS */}
               <ThemeToggle className="fixed top-4 right-4" />
             </ClientOnly>
             {children}

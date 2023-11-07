@@ -15,7 +15,7 @@ model Booking {
   adults                    Int
   children                  Int
   babies                    Int
-  arrival_date              String
+  arrival_date              String // extra field: ISO string of date
   arrival_date_year         Int
   arrival_date_month        String
   arrival_date_day_of_month Int

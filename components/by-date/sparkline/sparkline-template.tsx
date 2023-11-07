@@ -1,6 +1,7 @@
 "use client";
+import * as React from "react";
 
-import { RouterOutputs } from "@/app/_trpc/client";
+// component imports
 import {
   Card,
   CardContent,
@@ -8,15 +9,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
+// util imports
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+
+// icon imports
 import { ArrowDown, ArrowUp, Circle, Triangle } from "lucide-react";
-import * as React from "react";
+
+// chart imports
 import ReactApexChart from "react-apexcharts";
-
-// type TByDateBooking = RouterOutputs["getBookingsByDates"][number];
-
-// type TByDateBookingWithTotal = TByDateBooking & { total: number };
 
 interface ISparklineTemplateProps {
   data: number[];
@@ -33,25 +35,29 @@ const SparklineTemplate: React.FunctionComponent<ISparklineTemplateProps> = ({
   days,
   resolvedTheme,
 }) => {
+  // calculating total visitors
   const totalVisitors = data.reduce((acc, item) => {
     return acc + item;
   }, 0);
 
+  // finding past data of last days for percentage calculation
   const pastdays = data.slice(-days);
 
+  // calculating total visitors of past days
   const pastDaysTotal = pastdays.reduce((acc, item) => {
     return acc + item;
   }, 0);
 
+  // calculating percentage
   const percent =
     totalVisitors !== 0
       ? (pastDaysTotal / (totalVisitors - pastDaysTotal)) * 100
       : 0;
 
+  // getting value of css variable "--primary"
   const primaryColor = getComputedStyle(
     document.documentElement
   ).getPropertyValue("--primary");
-  // console.log(primaryColor); // 10px
 
   return (
     <Card>

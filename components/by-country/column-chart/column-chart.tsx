@@ -1,5 +1,9 @@
 "use client";
 
+// type import
+import { RouterOutputs } from "@/app/_trpc/client";
+
+// component import
 import {
   Card,
   CardContent,
@@ -7,6 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../../ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+// graph imports
 import {
   BarChart,
   Bar,
@@ -15,42 +22,30 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
 import CustomTooltip from "./recharts-tooltip";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn, countryNames, getFlagEmoji } from "@/lib/utils";
-// import CustomTooltip from "./tooltip";
-import { RouterOutputs } from "@/app/_trpc/client";
 import ReactApexChart from "react-apexcharts";
-import { ArrowDown, ArrowUp, Circle } from "lucide-react";
+
+// util import
+import { countryNames, getFlagEmoji } from "@/lib/utils";
 
 type TByCountryBooking = RouterOutputs["getBookingsByCountries"][number];
 
 interface IColumnChartProps {
   data: TByCountryBooking[];
   resolvedTheme: string;
-  days: number;
 }
 
 const ColumnChart: React.FunctionComponent<IColumnChartProps> = ({
   resolvedTheme,
   data,
-  days,
 }) => {
+  // calculating total visitors by adding adults, children and babies
   const formattedData = data.map((item) => ({
     ...item,
     total: item._sum.adults! + item._sum.children! + item._sum.babies!,
   }));
 
-  const recentCountries = formattedData.slice(-days).reduce((acc, item) => {
-    return acc + 1;
-  }, 0);
-
-  const percent =
-    formattedData.length !== 0
-      ? (recentCountries / (formattedData.length - recentCountries)) * 100
-      : 0;
-
+  // getting value of css variable "--primary"
   const primaryColor = getComputedStyle(
     document.documentElement
   ).getPropertyValue("--primary");
@@ -65,27 +60,8 @@ const ColumnChart: React.FunctionComponent<IColumnChartProps> = ({
                 <CardDescription>Total Countries</CardDescription>
                 <CardTitle className="flex gap-4 items-center">
                   {data.length}
-                  <div
-                    className={cn(
-                      "text-base sm:text-lg flex items-center",
-                      percent > 0
-                        ? "dark:text-lime-400 text-green-600"
-                        : percent < 0
-                        ? "dark:text-rose-400 text-green-600"
-                        : ""
-                    )}
-                  >
-                    {percent > 0 ? (
-                      <ArrowUp className="w-4 h-4 mr-1" />
-                    ) : percent < 0 ? (
-                      <ArrowDown className="w-4 h-4 mr-1" />
-                    ) : (
-                      <Circle className="w-3 h-3 mr-1" />
-                    )}
-                    {percent.toFixed(1)} %
-                  </div>
                 </CardTitle>
-                <CardDescription>Last {days} days</CardDescription>
+                <CardDescription>All countries</CardDescription>
               </div>
               <TabsList className="w-fit">
                 <TabsTrigger value="rechart">Recharts</TabsTrigger>
@@ -95,6 +71,7 @@ const ColumnChart: React.FunctionComponent<IColumnChartProps> = ({
           </CardHeader>
           <TabsContent value="apexchart" className="-mt-7 -mb-5">
             <ReactApexChart
+              data-testid="apexchart"
               type="bar"
               height={250}
               options={{
@@ -165,6 +142,7 @@ const ColumnChart: React.FunctionComponent<IColumnChartProps> = ({
               height="100%"
             >
               <BarChart
+                data-testid="rechart"
                 width={500}
                 height={250}
                 data={formattedData}
@@ -180,16 +158,19 @@ const ColumnChart: React.FunctionComponent<IColumnChartProps> = ({
                 <Tooltip content={<CustomTooltip />} />
                 <Bar
                   dataKey="_sum.adults"
+                  stackId={"_sum"}
                   stroke={`hsl(${primaryColor})`}
                   fill={`hsl(${primaryColor})`}
                 />
                 <Bar
                   dataKey="_sum.children"
+                  stackId={"_sum"}
                   stroke={`hsl(${primaryColor})`}
                   fill={`hsl(${primaryColor})`}
                 />
                 <Bar
                   dataKey="_sum.babies"
+                  stackId={"_sum"}
                   stroke={`hsl(${primaryColor})`}
                   fill={`hsl(${primaryColor})`}
                 />

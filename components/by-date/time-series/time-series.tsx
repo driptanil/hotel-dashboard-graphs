@@ -1,5 +1,9 @@
 "use client";
 
+// type import
+import { RouterOutputs } from "@/app/_trpc/client";
+
+// component imports
 import {
   Card,
   CardContent,
@@ -7,7 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../../ui/card";
-import { RouterOutputs } from "@/app/_trpc/client";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+// graph imports
 import {
   LineChart,
   Line,
@@ -16,13 +22,15 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-import { format } from "date-fns";
-import CustomTooltip from "./tooltip";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReactApexChart from "react-apexcharts";
-import { ArrowDown, ArrowUp, Circle, Triangle } from "lucide-react";
+import CustomTooltip from "./tooltip";
+
+// util imports
+import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+
+// icon imports
+import { ArrowDown, ArrowUp, Circle, Triangle } from "lucide-react";
 
 type TByDateBooking = RouterOutputs["getBookingsByDates"][number];
 
@@ -39,27 +47,29 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
   resolvedTheme,
   days,
 }) => {
+  // calculating all total visitors
   const totalVisitors = data.reduce((total, item) => {
     return total + item.total;
   }, 0);
 
+  // finding past data of last days for percentage calculation
   const pastdays = data.slice(-days);
 
+  // calculating total visitors of past days
   const pastDaysTotal = pastdays.reduce((acc, item) => {
     return acc + item.total;
   }, 0);
 
+  // calculating percentage
   const percent =
     totalVisitors !== 0
       ? (pastDaysTotal / (totalVisitors - pastDaysTotal)) * 100
       : 0;
 
+  // getting value of css variable "--primary"
   const primaryColor = getComputedStyle(
     document.documentElement
   ).getPropertyValue("--primary");
-  // console.log(primaryColor); // 10px
-
-  // const primaryColor = "142.1 70.6% 45.3%";
 
   return (
     <Card>
@@ -110,6 +120,7 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
           </CardHeader>
           <TabsContent value="apexchart" className="-mt-7 -mb-5">
             <ReactApexChart
+              data-testid="ApexChart-line"
               width={"100%"}
               height={250}
               options={{

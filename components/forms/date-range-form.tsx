@@ -1,14 +1,10 @@
 "use client";
+import React from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon } from "lucide-react";
-import { addDays, format } from "date-fns";
-import { useForm } from "react-hook-form";
+// form imports
 import * as z from "zod";
-
-import { cn, dateDiffInDays } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -18,14 +14,30 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
+// icon imports
+import { CalendarIcon } from "lucide-react";
+
+// utils imports
+import { addDays, format } from "date-fns";
+import { cn, dateDiffInDays } from "@/lib/utils";
+
+// trpc imports
+import { trpc } from "@/app/_trpc/client";
+
+// component imports
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { trpc } from "@/app/_trpc/client";
-import React from "react";
+
+// theme import
 import { useTheme } from "next-themes";
+
+// graph imports
 import ByDateGraphs from "../by-date/by-date-graphs";
 import ByCountryGraphs from "../by-country/by-country-graphs";
 
@@ -52,8 +64,6 @@ const DatePickerForm: React.FunctionComponent<IDatePickerFormProps> = ({
     },
   });
 
-  //   const [data, setData] = React.useState<any>(null);
-
   const utils = trpc.useUtils();
 
   const { data, isLoading } = trpc.getBookingsByDates.useQuery({
@@ -76,30 +86,14 @@ const DatePickerForm: React.FunctionComponent<IDatePickerFormProps> = ({
     total: item._sum.adults! + item._sum.children! + item._sum.babies!,
   }));
 
-  function onSubmit(values: z.infer<typeof FormSchema>) {
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // });
-
-    console.log(data?.length);
-    // console.log(values.date);
-  }
-
   const { resolvedTheme } = useTheme();
 
   const [boolean, setBoolean] = React.useState(false);
 
-  //   console.log(data?.length);
-
   return (
     <>
       <Form {...form}>
-        <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="space-y-8">
           <FormField
             control={form.control}
             name="date"
@@ -150,8 +144,6 @@ const DatePickerForm: React.FunctionComponent<IDatePickerFormProps> = ({
                                 to: field.value.to.toISOString(),
                               },
                             });
-
-                            // console.log(data?.length);
                           }
                         }}
                         disabled={(date) =>
@@ -163,7 +155,6 @@ const DatePickerForm: React.FunctionComponent<IDatePickerFormProps> = ({
                       />
                     </PopoverContent>
                   </Popover>
-                  <Button type="submit">Fetch</Button>
                 </div>
                 <FormDescription className="text-xs">
                   Select the start and end date of booking records
@@ -186,10 +177,6 @@ const DatePickerForm: React.FunctionComponent<IDatePickerFormProps> = ({
       <ByCountryGraphs
         isLoading={isLoadingCountry}
         data={countryData}
-        days={dateDiffInDays(
-          form.getValues().date.from,
-          form.getValues().date.to
-        )}
         resolvedTheme={resolvedTheme || "dark"}
       />
     </>
