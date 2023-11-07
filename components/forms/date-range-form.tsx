@@ -28,7 +28,6 @@ import React from "react";
 import { useTheme } from "next-themes";
 import ByDateGraphs from "../by-date/by-date-graphs";
 import ByCountryGraphs from "../by-country/by-country-graphs";
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 const FormSchema = z.object({
   date: z.object({ from: z.date(), to: z.date() }),
@@ -175,52 +174,24 @@ const DatePickerForm: React.FunctionComponent<IDatePickerFormProps> = ({
           />
         </form>
       </Form>
-      {isLoading ? (
-        <section className="flex flex-col gap-5">
-          <div className="grid grid-cols-1 xs:grid-cols-3 h-[150px] gap-3">
-            {[1, 2, 3].map((item, index) => (
-              <Card key={item} className="animate-pulse">
-                <CardHeader>
-                  <CardDescription className="h-3 rounded w-2/3 bg-secondary/50"></CardDescription>
-                  <CardTitle className="h-10 rounded-md w-1/3 bg-secondary/50"></CardTitle>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-          <Card className="animate-pulse h-[400px]">
-            <CardHeader>
-              <CardDescription className="h-4 rounded w-1/3 bg-secondary/50"></CardDescription>
-              <CardTitle className="h-10 rounded-md w-1/5 bg-secondary/50"></CardTitle>
-            </CardHeader>
-          </Card>
-        </section>
-      ) : formattedData ? (
-        <ByDateGraphs
-          data={formattedData}
-          resolvedTheme={resolvedTheme || "dark"}
-          days={dateDiffInDays(
-            form.getValues().date.from,
-            form.getValues().date.to
-          )}
-        />
-      ) : (
-        <div>No data</div>
-      )}
-      {isLoadingCountry ? (
-        <Card className="animate-pulse h-[400px]">
-          <CardHeader>
-            <CardDescription className="h-4 rounded w-1/3 bg-secondary/50"></CardDescription>
-            <CardTitle className="h-10 rounded-md w-1/5 bg-secondary/50"></CardTitle>
-          </CardHeader>
-        </Card>
-      ) : countryData ? (
-        <ByCountryGraphs
-          data={countryData}
-          resolvedTheme={resolvedTheme || "dark"}
-        />
-      ) : (
-        <div>No Data</div>
-      )}
+      <ByDateGraphs
+        isLoading={isLoading}
+        data={formattedData}
+        resolvedTheme={resolvedTheme || "dark"}
+        days={dateDiffInDays(
+          form.getValues().date.from,
+          form.getValues().date.to
+        )}
+      />
+      <ByCountryGraphs
+        isLoading={isLoadingCountry}
+        data={countryData}
+        days={dateDiffInDays(
+          form.getValues().date.from,
+          form.getValues().date.to
+        )}
+        resolvedTheme={resolvedTheme || "dark"}
+      />
     </>
   );
 };

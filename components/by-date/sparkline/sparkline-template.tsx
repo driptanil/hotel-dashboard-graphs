@@ -45,7 +45,7 @@ const SparklineTemplate: React.FunctionComponent<ISparklineTemplateProps> = ({
 
   const percent =
     totalVisitors !== 0
-      ? ((totalVisitors - pastDaysTotal) / totalVisitors) * 100
+      ? (pastDaysTotal / (totalVisitors - pastDaysTotal)) * 100
       : 0;
 
   const primaryColor = getComputedStyle(
@@ -63,7 +63,7 @@ const SparklineTemplate: React.FunctionComponent<ISparklineTemplateProps> = ({
               <p className="hidden md:flex mr-1">Total</p>
               {label}
             </div>
-            <span className="text-[0.6rem] leading-none sm:text-xs">
+            <span className="text-[0.6rem] leading-none sm:text-xs text-right">
               Last {days} days
             </span>
           </CardDescription>
@@ -164,7 +164,7 @@ const SparklineTemplate: React.FunctionComponent<ISparklineTemplateProps> = ({
             }}
             series={[
               {
-                name: "Adults",
+                name: label,
                 data: data.map((item) => item),
                 color: `hsla(${primaryColor})`,
               },

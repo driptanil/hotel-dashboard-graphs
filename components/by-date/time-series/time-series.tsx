@@ -51,7 +51,7 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
 
   const percent =
     totalVisitors !== 0
-      ? ((totalVisitors - pastDaysTotal) / totalVisitors) * 100
+      ? (pastDaysTotal / (totalVisitors - pastDaysTotal)) * 100
       : 0;
 
   const primaryColor = getComputedStyle(
@@ -66,7 +66,7 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
       <CardContent className="w-full">
         <Tabs defaultValue="apexchart">
           <CardHeader className="w-full pr-0">
-            <div className="flex justify-between items-center w-full">
+            <div className="flex flex-col xs:flex-row justify-between xs:items-center w-full gap-3">
               <div className="flex flex-col gap-2">
                 <CardDescription>
                   <div className="flex text-xs sm:text-sm items-center">
@@ -97,16 +97,16 @@ const TimeSeries: React.FunctionComponent<ITimeSeriesProps> = ({
                     {percent.toFixed(1)} %
                   </div>
                 </CardTitle>
+                <CardDescription>Last {days} days</CardDescription>
               </div>
 
-              <TabsList className="">
+              <TabsList className="w-fit">
                 <TabsTrigger data-testid="rechart-line-button" value="rechart">
                   Recharts
                 </TabsTrigger>
                 <TabsTrigger value="apexchart">Apexcharts</TabsTrigger>
               </TabsList>
             </div>
-            <CardDescription>Last {days} days</CardDescription>
           </CardHeader>
           <TabsContent value="apexchart" className="-mt-7 -mb-5">
             <ReactApexChart

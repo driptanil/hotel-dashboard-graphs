@@ -18,52 +18,80 @@ import {
 
 import CustomTooltip from "./recharts-tooltip";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { countryNames, getFlagEmoji } from "@/lib/utils";
+import { cn, countryNames, getFlagEmoji } from "@/lib/utils";
 // import CustomTooltip from "./tooltip";
 import { RouterOutputs } from "@/app/_trpc/client";
 import ReactApexChart from "react-apexcharts";
+import { ArrowDown, ArrowUp, Circle } from "lucide-react";
 
 type TByCountryBooking = RouterOutputs["getBookingsByCountries"][number];
 
 interface IColumnChartProps {
   data: TByCountryBooking[];
   resolvedTheme: string;
+  days: number;
 }
 
 const ColumnChart: React.FunctionComponent<IColumnChartProps> = ({
   resolvedTheme,
   data,
+  days,
 }) => {
   const formattedData = data.map((item) => ({
     ...item,
     total: item._sum.adults! + item._sum.children! + item._sum.babies!,
   }));
 
-  //   console.log(data);
+  const recentCountries = formattedData.slice(-days).reduce((acc, item) => {
+    return acc + 1;
+  }, 0);
+
+  const percent =
+    formattedData.length !== 0
+      ? (recentCountries / (formattedData.length - recentCountries)) * 100
+      : 0;
 
   const primaryColor = getComputedStyle(
     document.documentElement
   ).getPropertyValue("--primary");
-  //   console.log(primaryColor); // 10px
-
-  // const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 
   return (
     <Card>
       <CardContent className="w-full">
         <Tabs defaultValue="apexchart">
           <CardHeader className="w-full pr-0">
-            <div className="flex justify-between items-center w-full">
+            <div className="flex flex-col xs:flex-row justify-between xs:items-center w-full gap-3">
               <div className="flex flex-col gap-2">
                 <CardDescription>Total Countries</CardDescription>
-                <CardTitle>{formattedData.length}</CardTitle>
+                <CardTitle className="flex gap-4 items-center">
+                  {data.length}
+                  <div
+                    className={cn(
+                      "text-base sm:text-lg flex items-center",
+                      percent > 0
+                        ? "dark:text-lime-400 text-green-600"
+                        : percent < 0
+                        ? "dark:text-rose-400 text-green-600"
+                        : ""
+                    )}
+                  >
+                    {percent > 0 ? (
+                      <ArrowUp className="w-4 h-4 mr-1" />
+                    ) : percent < 0 ? (
+                      <ArrowDown className="w-4 h-4 mr-1" />
+                    ) : (
+                      <Circle className="w-3 h-3 mr-1" />
+                    )}
+                    {percent.toFixed(1)} %
+                  </div>
+                </CardTitle>
+                <CardDescription>Last {days} days</CardDescription>
               </div>
-              <TabsList className="">
+              <TabsList className="w-fit">
                 <TabsTrigger value="rechart">Recharts</TabsTrigger>
                 <TabsTrigger value="apexchart">Apexcharts</TabsTrigger>
               </TabsList>
             </div>
-            <CardDescription>Visitors from all countries</CardDescription>
           </CardHeader>
           <TabsContent value="apexchart" className="-mt-7 -mb-5">
             <ReactApexChart
